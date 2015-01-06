@@ -8,10 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.Spinner;
 
-public class MainActivity extends ActionBarActivity implements OnClickListener {
+public class MainActivity extends ActionBarActivity implements OnClickListener,
+		OnItemSelectedListener {
 
 	private OrtLauscher lauscher;
 	private LocationManager locationManager;
@@ -25,20 +28,22 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		setContentView(R.layout.activity_main);
 
 		// Location Manager vom System holen
-		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		
+		locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+
 		button = (Button) findViewById(R.id.button);
 		button.setOnClickListener(this);
-		
+
 		vehikelFeld = (Spinner) findViewById(R.id.vehikel);
 
 		// Spinner aus Enum füllen
 		EnumAdapter<Vehikel> adapter = new EnumAdapter<Vehikel>(this,
 				android.R.layout.simple_spinner_item, Vehikel.values());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
+		// Adapter verknüpfen
 		vehikelFeld.setAdapter(adapter);
-		
+		vehikelFeld.setOnItemSelectedListener(this);
+
 		lauscher = new OrtLauscher(this);
 	}
 
@@ -66,31 +71,51 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-			if (started){
-				button.setText(R.string.button_start);
-				stop();
-			} else {
-				button.setText(R.string.button_stop);
-				start();
-			}
-			started=!started;
+		if (started) {
+			button.setText(R.string.button_start);
+			stop();
+		} else {
+			button.setText(R.string.button_stop);
+			start();
+		}
+		started = !started;
 	}
 
-	public void start(){
+	public void start() {
 		lauscher.start();
-		if (locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
-			// Listener registrieren, alle 10 Sekunden oder 2 Meter Bescheid sagen
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 2, lauscher);
+		if (locationManager.getAllProviders().contains(
+				LocationManager.GPS_PROVIDER)) {
+			// Listener registrieren, alle n Millisekunden mit 2 Meter Abstand
+			// Bescheid sagen
+			locationManager.requestLocationUpdates(
+					LocationManager.GPS_PROVIDER, getVehikel().getInterval(),
+					2, lauscher);
 		}
 	}
-	
-	public void stop(){
+
+	public void stop() {
 		// Lauscher beenden
 		locationManager.removeUpdates(lauscher);
 		lauscher.stop();
 	}
-	
-	public Vehikel getVehikel(){
+
+	public Vehikel getVehikel() {
 		return (Vehikel) vehikelFeld.getSelectedItem();
 	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position,
+			long id) {
+		if (started) {
+			stop();
+			start();
+		}
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		// Keine Aktion nötig
+
+	}
+
 }
