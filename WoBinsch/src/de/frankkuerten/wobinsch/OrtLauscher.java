@@ -45,12 +45,4 @@ public class OrtLauscher implements LocationListener {
 	public void setCallBack(MainActivity callBack) {
 		this.activity = callBack;
 	}
-
-	public void start() {
-		strecke.clear();
-	}
-
-	public void stop() {
-		strecke.dump2gpx();
-	}
 }

@@ -13,13 +13,14 @@ import org.simpleframework.xml.core.Persister;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 @Root(name="gpx")
-public class Reise {
+public class Reise implements OnItemClickListener{
 
-	@Path("trk")
-	@ElementList(inline=true)
 	private List<TeilStrecke> positionen = new Vector<TeilStrecke>();
 	private MainActivity activity;
 	private TeilStreckeListAdapter listAdapter;
@@ -34,13 +35,13 @@ public class Reise {
 		
 		ListView locList = (ListView) activity.findViewById(R.id.loc);
 		locList.setAdapter(listAdapter);
-		dbdao = new DBDAOPosition(activity);
+		dbdao = DBDAOPosition.instance(activity);
+		
+		locList.setOnItemClickListener(this);
 	}
 
 	public void addPosition(Position pos){
 		dbdao.insert(pos);
-//		positionen.add(pos);
-//		listAdapter.notifyDataSetChanged();
 	}
 	
 	public void clear(){
@@ -67,5 +68,41 @@ public class Reise {
 		positionen.clear();
 		positionen.addAll(dbdao.initFromDB());
 		listAdapter.notifyDataSetChanged();
+	}
+	
+	public void loescheGewaehlteTS(){
+		for (TeilStrecke ts : this.positionen){
+			if (ts.isGewaehlt()){
+				for (Position pos : ts.getPositionen()){
+					dbdao.delete(pos);
+				}
+			}
+		}
+		initFromDB();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		positionen.get(position).setGewaehlt(!positionen.get(position).isGewaehlt());
+		listAdapter.notifyDataSetChanged();
+	}
+	
+	@Path("trk")
+	@ElementList(inline=true)
+	public List<TeilStrecke> getGewaehlteTS(){
+		List<TeilStrecke> erg = new Vector<TeilStrecke>();
+		for (TeilStrecke ts : positionen){
+			if (ts.isGewaehlt()){
+				erg.add(ts);
+			}
+		}
+		return erg;
+	}
+	
+	@Path("trk")
+	@ElementList(inline=true)
+	public void setGewaehlteTS(List<TeilStrecke> pos){
+		positionen = pos;
 	}
 }

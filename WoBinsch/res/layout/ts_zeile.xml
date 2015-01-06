@@ -9,36 +9,82 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
+        <CheckBox
+            android:id="@+id/Gewaehlt" 
+            android:focusable="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/Datum"
+            android:id="@+id/Vehikel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center_horizontal" />
         <TextView
-            android:id="@+id/SchnittGeschwindigkeit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"  />
+            android:text="@string/Klammerauf"/>
+        <TextView
+            android:id="@+id/MessPunkte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Punkte"/>
     </LinearLayout>
     
     <LinearLayout
         android:id="@+id/Zeile2Container"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/DatumVon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bis"/>
+        <TextView
+            android:id="@+id/DatumBis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/Zeile3Container"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
         <TextView
-            android:id="@+id/Gesamtlaenge"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:text="@string/Strecke"/>
+        <TextView
+            android:id="@+id/Gesamtlaenge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal" />
         <TextView
-            android:id="@+id/Vehikel"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal" />
+            android:text="@string/m"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Geschwindigkeit"/>
+        <TextView
+            android:id="@+id/SchnittGeschwindigkeit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"  />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mProS"/>
     </LinearLayout>
 
 </LinearLayout>

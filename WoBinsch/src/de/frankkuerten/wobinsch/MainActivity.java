@@ -21,6 +21,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private boolean started = false;
 	private Button button;
 	private Spinner vehikelFeld;
+	private Reise r;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +61,24 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.alleExportieren) {
-			Reise r = new Reise(this);
+		
+		if (id == R.id.alleAnzeigen) {
+			r = new Reise(this);
 			r.initFromDB();
-			r.dump2gpx();
+			return true;
+		}
+		
+		if (id == R.id.exportieren) {
+			if (r != null) {
+				r.dump2gpx();
+			}
+			return true;
+		}
+		
+		if (id == R.id.loeschen) {
+			if (r != null) {
+				r.loescheGewaehlteTS();
+			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -82,7 +97,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	}
 
 	public void start() {
-		lauscher.start();
 		if (locationManager.getAllProviders().contains(
 				LocationManager.GPS_PROVIDER)) {
 			// Listener registrieren, alle n Millisekunden mit 2 Meter Abstand
@@ -96,7 +110,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	public void stop() {
 		// Lauscher beenden
 		locationManager.removeUpdates(lauscher);
-		lauscher.stop();
 	}
 
 	public Vehikel getVehikel() {
@@ -106,7 +119,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
-		if (started) {
+		if (view.getId() == R.id.vehikel && started) {
 			stop();
 			start();
 		}

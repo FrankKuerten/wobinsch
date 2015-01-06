@@ -1,12 +1,12 @@
 package de.frankkuerten.wobinsch;
 
-import java.util.Date;
 import java.util.List;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,17 +45,24 @@ public class TeilStreckeListAdapter extends BaseAdapter {
 	}
 	
 	private void bindView(LinearLayout view, int position) {
-		TeilStrecke pos = (TeilStrecke)getItem(position);
+		TeilStrecke ts = (TeilStrecke)getItem(position);
 		view.setId((int) getItemId(position));
-		TextView datumFeld = (TextView) view.findViewById(R.id.Datum);
-		TextView geschwFeld = (TextView) view.findViewById(R.id.SchnittGeschwindigkeit);
-		TextView laengeFeld = (TextView) view.findViewById(R.id.Gesamtlaenge);
-		TextView vehikelFeld = (TextView) view.findViewById(R.id.Vehikel);
 		
-		datumFeld.setText(Position.df.format(new Date(pos.getPositionen().get(0).getOrt().getTime())));
-		laengeFeld.setText("L:" + String.valueOf(pos.getGesamtLaenge()));
-		vehikelFeld.setText("Vehikel:" + pos.getPositionen().get(0).getVehikel());
-		geschwFeld.setText("Geschw.:" + String.valueOf(pos.getSchnittGeschwindigkeit()));
+		CheckBox gewaehltFeld = (CheckBox) view.findViewById(R.id.Gewaehlt);
+		TextView vehikelFeld = (TextView) view.findViewById(R.id.Vehikel);
+		TextView punkteFeld = (TextView) view.findViewById(R.id.MessPunkte);
+		TextView datumVonFeld = (TextView) view.findViewById(R.id.DatumVon);
+		TextView datumBisFeld = (TextView) view.findViewById(R.id.DatumBis);
+		TextView laengeFeld = (TextView) view.findViewById(R.id.Gesamtlaenge);
+		TextView geschwFeld = (TextView) view.findViewById(R.id.SchnittGeschwindigkeit);
+		
+		gewaehltFeld.setChecked(ts.isGewaehlt());
+		vehikelFeld.setText(ts.getVehikel().toString());
+		punkteFeld.setText(String.valueOf(ts.getPositionen().size()));
+		datumVonFeld.setText(Position.df.format(ts.getDatumVon()));
+		datumBisFeld.setText(Position.df.format(ts.getDatumBis()));
+		laengeFeld.setText(String.valueOf(ts.getGesamtLaenge()));
+		geschwFeld.setText(String.valueOf(ts.getSchnittGeschwindigkeit()));
 	}
 
 }

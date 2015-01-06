@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 
 public class DBDAOPosition extends SQLiteOpenHelper {
+	
+	private static DBDAOPosition instance;
 
 	static String DBNAME = "WOBINSCH";
 	static String T_POSITION = "T_POSITION";
@@ -21,8 +23,15 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 	static String COL_ACC = "ACCURACY";
 	static String COL_VEH = "VEHICLE";
 
-	public DBDAOPosition(Context context) {
+	private DBDAOPosition(Context context) {
 		super(context, DBNAME, null, 1);
+	}
+	
+	public static DBDAOPosition instance(Context context){
+		if (instance == null){
+			instance = new DBDAOPosition(context);
+		}
+		return instance;
 	}
 
 	@Override
@@ -63,6 +72,19 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 		db.insert(T_POSITION, COL_ID, cv);
 		db.close();
 	}
+	
+	public void delete(Position pos) {
+		if (pos == null || pos.getOrt() == null) {
+			return;
+		}
+		SQLiteDatabase db = this.getWritableDatabase();
+		StringBuffer del = new StringBuffer();
+		del.append("DELETE FROM ").append(T_POSITION).append(" WHERE ")
+				.append(COL_ID).append(" = ").append(pos.getOrt().getTime());
+		
+		db.execSQL(del.toString());
+		db.close();
+	}
 
 	public Cursor readAll() {
 		StringBuffer sel = new StringBuffer();
@@ -94,9 +116,9 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 				if (posVorher == null
 				// oder Vehikel gewechselt
 						|| pos.getVehikel() != posVorher.getVehikel()
-						// oder 1 Minute Unterbrechung
+						// oder 10 Minuten Unterbrechung
 						|| pos.getOrt().getTime()
-								- posVorher.getOrt().getTime() > 60000) {
+								- posVorher.getOrt().getTime() > 600000) {
 					ts = new TeilStrecke();
 					erg.add(ts);
 				} else {
@@ -109,7 +131,7 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 				}
 				if (ts.getGesamtLaenge() > 0){
 					long anfang = ts.getPositionen().get(0).getOrt().getTime();
-					long ende = ts.getPositionen().get(ts.getPositionen().size() - 1).getOrt().getTime();
+					long ende = pos.getOrt().getTime();
 					ts.setSchnittGeschwindigkeit(ts.getGesamtLaenge() / ((ende - anfang) / 1000));
 				}
 

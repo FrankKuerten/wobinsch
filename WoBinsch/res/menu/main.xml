@@ -4,9 +4,20 @@
     tools:context="de.frankkuerten.wobinsch.MainActivity" >
 
     <item
-        android:id="@+id/alleExportieren"
+        android:id="@+id/alleAnzeigen"
         android:orderInCategory="100"
-        android:title="@string/alleExportieren"
+        android:title="@string/alleAnzeigen"
+        app:showAsAction="never"/>
+     
+     <item
+        android:id="@+id/exportieren"
+        android:orderInCategory="200"
+        android:title="@string/exportieren"
         app:showAsAction="never"/>
 
+     <item
+        android:id="@+id/loeschen"
+        android:orderInCategory="300"
+        android:title="@string/loeschen"
+        app:showAsAction="never"/>
 </menu>
