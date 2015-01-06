@@ -1,5 +1,5 @@
-wobinschrepo
-============
+WoBinsch
+========
 
 Minimalistisches Logbuch für Android
 
