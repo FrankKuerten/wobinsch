@@ -97,6 +97,25 @@ public class Reise implements OnItemClickListener {
 		}
 	}
 
+	public static boolean isAnkerketteLos(List<Position> aktTS) {
+		// Ankerwache
+		if (aktTS == null || aktTS.size() < 2
+				|| aktTS.get(0).getVehikel() != Vehikel.VA) {
+			return false;
+		}
+		Position erste = aktTS.get(0);
+		Position letzte = aktTS.get(aktTS.size() - 1);
+		float[] entfernung = { 0 };
+		Location.distanceBetween(erste.getLat(),
+				erste.getLon(), letzte.getLat(), letzte.getLon(),
+				entfernung);
+		// TODO: Magic number 5 Meter
+		if (entfernung.length > 0 && entfernung[0] > 5) {
+			return true;
+		}
+		return false;
+	}
+
 	public void loescheGewaehlteTS() {
 		for (TeilStrecke ts : this.positionen) {
 			if (ts.isGewaehlt()) {

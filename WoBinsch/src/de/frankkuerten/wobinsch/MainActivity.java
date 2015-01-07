@@ -1,11 +1,12 @@
 package de.frankkuerten.wobinsch;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.location.LocationManager;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,20 +65,20 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		
+
 		if (id == R.id.alleAnzeigen) {
 			reise = new Reise(this);
 			reise.initFromDB();
 			return true;
 		}
-		
+
 		if (id == R.id.exportieren) {
 			if (reise != null) {
 				reise.dump2gpx();
 			}
 			return true;
 		}
-		
+
 		if (id == R.id.loeschen) {
 			if (reise != null) {
 				reise.loescheGewaehlteTS();
@@ -134,21 +135,36 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 
 	}
 
-	public void gibLaut(){
+	private Uri gibAlarm() {
 		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
-		if(alert == null){
-		    // alert is null, using backup
-		    alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		if (alert == null) {
+			// alert is null, using backup
+			alert = RingtoneManager
+					.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-		    // I can't see this ever being null (as always have a default notification)
-		    // but just incase
-		    if(alert == null) {  
-		        // alert backup is null, using 2nd backup
-		        alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);                
-		    }
+			// I can't see this ever being null (as always have a default
+			// notification) but just incase
+			if (alert == null) {
+				// alert backup is null, using 2nd backup
+				alert = RingtoneManager
+						.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+			}
 		}
-		Ringtone r = RingtoneManager.getRingtone(this, alert);
-		r.play();
+		return alert;
+	}
+
+	public void gibLauteNachricht() {
+		// Define Notification Manager
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext())
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setAutoCancel(true)
+				.setContentTitle(getString(R.string.Alarm))
+				.setContentText(getString(R.string.AnkerwacheNachricht))
+				.setSound(gibAlarm()); // This sets the sound to play
+
+		// Display notification
+		notificationManager.notify(0, mBuilder.build());
 	}
 }

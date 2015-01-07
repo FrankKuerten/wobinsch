@@ -1,5 +1,7 @@
 package de.frankkuerten.wobinsch;
 
+import java.util.List;
+
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -18,6 +20,14 @@ public class OrtLauscher implements LocationListener {
 		Position pos = new Position(ort, activity.getVehikel());
 		DBDAOPosition dbdao = DBDAOPosition.instance(activity);
 		dbdao.insert(pos);
+
+		// Ankerwache
+		List<Position> aktTS = dbdao.readNewestBlock();
+		if (activity.getVehikel() == Vehikel.VA
+				&& Reise.isAnkerketteLos(aktTS)) {
+			activity.gibLauteNachricht();
+		}
+		
 	}
 
 	@Override

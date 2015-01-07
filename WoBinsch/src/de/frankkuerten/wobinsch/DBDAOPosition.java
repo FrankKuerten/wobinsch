@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 
 public class DBDAOPosition extends SQLiteOpenHelper {
-	
+
 	private static DBDAOPosition instance;
 
 	static String DBNAME = "WOBINSCH";
@@ -26,9 +26,9 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 	private DBDAOPosition(Context context) {
 		super(context, DBNAME, null, 1);
 	}
-	
-	public static DBDAOPosition instance(Context context){
-		if (instance == null){
+
+	public static DBDAOPosition instance(Context context) {
+		if (instance == null) {
 			instance = new DBDAOPosition(context);
 		}
 		return instance;
@@ -72,7 +72,7 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 		db.insert(T_POSITION, COL_ID, cv);
 		db.close();
 	}
-	
+
 	public void delete(Position pos) {
 		if (pos == null || pos.getOrt() == null) {
 			return;
@@ -81,18 +81,18 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 		StringBuffer del = new StringBuffer();
 		del.append("DELETE FROM ").append(T_POSITION).append(" WHERE ")
 				.append(COL_ID).append(" = ").append(pos.getOrt().getTime());
-		
+
 		db.execSQL(del.toString());
 		db.close();
 	}
 
-	public Cursor readAll() {
+	private Cursor readAll() {
 		StringBuffer sel = new StringBuffer();
 		sel.append("SELECT * FROM ").append(T_POSITION).append(" ORDER BY ")
 				.append(COL_ID);
 		return getReadableDatabase().rawQuery(sel.toString(), new String[] {});
 	}
-	
+
 	public List<Position> readAllPositions() {
 		Cursor c = readAll();
 		List<Position> erg = new Vector<Position>();
@@ -101,20 +101,54 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				pos = new Position();
-				pos.setVehikel(Vehikel.valueOf(c.getString(c
-						.getColumnIndex(COL_VEH))));
-				Location ort = pos.getOrt();
-				ort.setTime(c.getLong(c.getColumnIndex(COL_ID)));
-				ort.setLongitude(c.getFloat(c.getColumnIndex(COL_LON)));
-				ort.setLatitude(c.getFloat(c.getColumnIndex(COL_LAT)));
-				ort.setSpeed(c.getFloat(c.getColumnIndex(COL_VEL)));
-				ort.setAccuracy(c.getFloat(c.getColumnIndex(COL_ACC)));
-
+				this.mapColumns(c, pos);
 				erg.add(pos);
 				c.moveToNext();
 			}
 		}
 		c.close();
 		return erg;
+	}
+
+	private Cursor readAllReverse() {
+		StringBuffer sel = new StringBuffer();
+		sel.append("SELECT * FROM ").append(T_POSITION).append(" ORDER BY ")
+				.append(COL_ID).append(" DESC");
+		return getReadableDatabase().rawQuery(sel.toString(), new String[] {});
+	}
+	
+	public List<Position> readNewestBlock() {
+		Cursor c = readAllReverse();
+		List<Position> erg = new Vector<Position>();
+		Position pos = null;
+		Position posVorher = null;
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				pos = new Position();
+				this.mapColumns(c, pos);
+				if (posVorher != null 
+						// Wechsel der TeilStrecke?
+						&& (pos.getVehikel() != posVorher.getVehikel()
+						|| posVorher.getOrt().getTime() - pos.getOrt().getTime() > 600000)){
+					break;
+				}
+				erg.add(0, pos);
+				posVorher = pos;
+				c.moveToNext();
+			}
+		}
+		c.close();
+		return erg;
+	}
+
+	private void mapColumns(Cursor c, Position pos) {
+		pos.setVehikel(Vehikel.valueOf(c.getString(c.getColumnIndex(COL_VEH))));
+		Location ort = pos.getOrt();
+		ort.setTime(c.getLong(c.getColumnIndex(COL_ID)));
+		ort.setLongitude(c.getFloat(c.getColumnIndex(COL_LON)));
+		ort.setLatitude(c.getFloat(c.getColumnIndex(COL_LAT)));
+		ort.setSpeed(c.getFloat(c.getColumnIndex(COL_VEL)));
+		ort.setAccuracy(c.getFloat(c.getColumnIndex(COL_ACC)));
 	}
 }
