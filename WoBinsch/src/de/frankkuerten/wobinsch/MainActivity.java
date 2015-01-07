@@ -2,6 +2,9 @@ package de.frankkuerten.wobinsch;
 
 import android.content.Context;
 import android.location.LocationManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -21,7 +24,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private boolean started = false;
 	private Button button;
 	private Spinner vehikelFeld;
-	private Reise r;
+	private Reise reise;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,21 +66,21 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		int id = item.getItemId();
 		
 		if (id == R.id.alleAnzeigen) {
-			r = new Reise(this);
-			r.initFromDB();
+			reise = new Reise(this);
+			reise.initFromDB();
 			return true;
 		}
 		
 		if (id == R.id.exportieren) {
-			if (r != null) {
-				r.dump2gpx();
+			if (reise != null) {
+				reise.dump2gpx();
 			}
 			return true;
 		}
 		
 		if (id == R.id.loeschen) {
-			if (r != null) {
-				r.loescheGewaehlteTS();
+			if (reise != null) {
+				reise.loescheGewaehlteTS();
 			}
 			return true;
 		}
@@ -131,4 +134,21 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 
 	}
 
+	public void gibLaut(){
+		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+
+		if(alert == null){
+		    // alert is null, using backup
+		    alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+		    // I can't see this ever being null (as always have a default notification)
+		    // but just incase
+		    if(alert == null) {  
+		        // alert backup is null, using 2nd backup
+		        alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);                
+		    }
+		}
+		Ringtone r = RingtoneManager.getRingtone(this, alert);
+		r.play();
+	}
 }

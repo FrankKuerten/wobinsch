@@ -92,14 +92,11 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 				.append(COL_ID);
 		return getReadableDatabase().rawQuery(sel.toString(), new String[] {});
 	}
-
-	public List<TeilStrecke> initFromDB() {
+	
+	public List<Position> readAllPositions() {
 		Cursor c = readAll();
-		List<TeilStrecke> erg = new Vector<TeilStrecke>();
+		List<Position> erg = new Vector<Position>();
 		Position pos = null;
-		Position posVorher = null;
-		TeilStrecke ts = null;
-		float[] entfernung = {0};
 		if (c.getCount() > 0) {
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
@@ -113,30 +110,7 @@ public class DBDAOPosition extends SQLiteOpenHelper {
 				ort.setSpeed(c.getFloat(c.getColumnIndex(COL_VEL)));
 				ort.setAccuracy(c.getFloat(c.getColumnIndex(COL_ACC)));
 
-				if (posVorher == null
-				// oder Vehikel gewechselt
-						|| pos.getVehikel() != posVorher.getVehikel()
-						// oder 10 Minuten Unterbrechung
-						|| pos.getOrt().getTime()
-								- posVorher.getOrt().getTime() > 600000) {
-					ts = new TeilStrecke();
-					erg.add(ts);
-				} else {
-					Location.distanceBetween(posVorher.getLat(),
-							posVorher.getLon(), pos.getLat(), pos.getLon(),
-							entfernung);
-					if (entfernung.length > 0){
-						ts.setGesamtLaenge(ts.getGesamtLaenge() + entfernung[0]);
-					}
-				}
-				if (ts.getGesamtLaenge() > 0){
-					long anfang = ts.getPositionen().get(0).getOrt().getTime();
-					long ende = pos.getOrt().getTime();
-					ts.setSchnittGeschwindigkeit(ts.getGesamtLaenge() / ((ende - anfang) / 1000));
-				}
-
-				ts.addPosition(pos);
-				posVorher = pos;
+				erg.add(pos);
 				c.moveToNext();
 			}
 		}
