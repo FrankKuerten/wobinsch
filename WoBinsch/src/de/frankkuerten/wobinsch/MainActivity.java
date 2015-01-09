@@ -141,12 +141,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	}
 
 	private Uri gibAlarm() {
-		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
 		if (alert == null) {
 			// alert is null, using backup
-			alert = RingtoneManager
-					.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+			alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
 			// I can't see this ever being null (as always have a default
 			// notification) but just incase
