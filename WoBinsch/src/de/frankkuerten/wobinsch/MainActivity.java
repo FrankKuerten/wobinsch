@@ -2,6 +2,8 @@ package de.frankkuerten.wobinsch;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -30,6 +32,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		
 		setContentView(R.layout.activity_main);
 
 		// Location Manager vom System holen
@@ -167,4 +172,18 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		// Display notification
 		notificationManager.notify(0, mBuilder.build());
 	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+//		super.onConfigurationChanged(newConfig);
+		if (started) {
+			button.setText(R.string.button_stop);
+		} else {
+			button.setText(R.string.button_start);
+		}
+		if (reise != null){
+			reise.refreshList();
+		}
+	}
+	
 }

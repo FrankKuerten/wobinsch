@@ -152,4 +152,10 @@ public class Reise implements OnItemClickListener {
 	public void setGewaehlteTS(List<TeilStrecke> pos) {
 		positionen = pos;
 	}
+	
+	public void refreshList(){
+		if (listAdapter != null){
+			listAdapter.notifyDataSetChanged();
+		}
+	}
 }
