@@ -1,7 +1,9 @@
 package de.frankkuerten.wobinsch;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.location.LocationManager;
@@ -85,8 +87,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		}
 
 		if (id == R.id.loeschen) {
-			if (reise != null) {
-				reise.loescheGewaehlteTS();
+			if (reise != null && reise.hasGewaehlteTS()) {
+				wirklichLoeschen();
 			}
 			return true;
 		}
@@ -159,22 +161,22 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	}
 
 	public void gibLauteNachricht() {
-		// Define Notification Manager
+		// Notification Manager zitieren
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext())
-				.setSmallIcon(R.drawable.ic_launcher)
+				.setSmallIcon(R.drawable.anker)
 				.setAutoCancel(true)
 				.setContentTitle(getString(R.string.Alarm))
 				.setContentText(getString(R.string.AnkerwacheNachricht))
 				.setSound(gibAlarm()); // This sets the sound to play
 
-		// Display notification
+		// Nachricht anzeigen
 		notificationManager.notify(0, mBuilder.build());
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-//		super.onConfigurationChanged(newConfig);
+		super.onConfigurationChanged(newConfig);
 		if (started) {
 			button.setText(R.string.button_stop);
 		} else {
@@ -183,6 +185,28 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		if (reise != null){
 			reise.refreshList();
 		}
+	}
+	
+	private void wirklichLoeschen(){
+		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setMessage(getString(R.string.wirklichLoeschen));
+        alertBuilder.setCancelable(true);
+        alertBuilder.setPositiveButton(getString(R.string.ja),
+                new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            	reise.loescheGewaehlteTS();
+                dialog.cancel();
+            }
+        });
+        alertBuilder.setNegativeButton(getString(R.string.nein),
+                new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
 	}
 	
 }

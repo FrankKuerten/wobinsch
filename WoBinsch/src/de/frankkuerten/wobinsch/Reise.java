@@ -126,6 +126,15 @@ public class Reise implements OnItemClickListener {
 		}
 		initFromDB();
 	}
+	
+	public boolean hasGewaehlteTS() {
+		for (TeilStrecke ts : this.positionen) {
+			if (ts.isGewaehlt()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,

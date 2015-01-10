@@ -234,7 +234,10 @@ int drawable abc_textfield_searchview_holo_dark 0x7f020053
 int drawable abc_textfield_searchview_holo_light 0x7f020054
 int drawable abc_textfield_searchview_right_holo_dark 0x7f020055
 int drawable abc_textfield_searchview_right_holo_light 0x7f020056
-int drawable ic_launcher 0x7f020057
+int drawable anker 0x7f020057
+int drawable anker_rot 0x7f020058
+int drawable anker_schwarz 0x7f020059
+int drawable ic_launcher 0x7f02005a
 int id Breite 0x7f050044
 int id Datum 0x7f050040
 int id DatumBis 0x7f05004c
@@ -376,9 +379,12 @@ int string button_start 0x7f0a0010
 int string button_stop 0x7f0a0011
 int string exportieren 0x7f0a0014
 int string hello_world 0x7f0a000e
+int string ja 0x7f0a0021
 int string loeschen 0x7f0a0015
 int string m 0x7f0a001c
 int string mProS 0x7f0a001d
+int string nein 0x7f0a0022
+int string wirklichLoeschen 0x7f0a0020
 int style AppBaseTheme 0x7f0b008b
 int style AppTheme 0x7f0b008c
 int style TextAppearance_AppCompat_Base_CompactMenu_Dialog 0x7f0b0063
