@@ -142,6 +142,7 @@ public class Reise implements OnItemClickListener {
 		positionen.get(position).setGewaehlt(
 				!positionen.get(position).isGewaehlt());
 		listAdapter.notifyDataSetChanged();
+		activity.invalidateOptionsMenu();
 	}
 
 	@Path("trk")

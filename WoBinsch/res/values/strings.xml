@@ -23,5 +23,8 @@
     <string name="wirklichLoeschen">Wirklich löschen?</string>
     <string name="ja">Ja</string>
     <string name="nein">Nein</string>
+    <string name="alleAnzeigenKurz">Alle</string>
+    <string name="exportierenKurz">Export</string>
+    <string name="loeschenKurz">Löschen</string>
 
 </resources>

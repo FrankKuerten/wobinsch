@@ -7,17 +7,23 @@
         android:id="@+id/alleAnzeigen"
         android:orderInCategory="100"
         android:title="@string/alleAnzeigen"
-        app:showAsAction="never"/>
+        android:titleCondensed="@string/alleAnzeigenKurz"
+        android:icon="@drawable/search"
+        app:showAsAction="ifRoom"/>
      
      <item
         android:id="@+id/exportieren"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         android:title="@string/exportieren"
-        app:showAsAction="never"/>
+        android:titleCondensed="@string/exportierenKurz"
+        android:icon="@drawable/export"
+        app:showAsAction="ifRoom"/>
 
      <item
         android:id="@+id/loeschen"
-        android:orderInCategory="300"
+        android:orderInCategory="100"
         android:title="@string/loeschen"
-        app:showAsAction="never"/>
+        android:titleCondensed="@string/loeschenKurz"
+        android:icon="@drawable/trash"
+        app:showAsAction="ifRoom"/>
 </menu>

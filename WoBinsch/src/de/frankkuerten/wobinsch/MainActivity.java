@@ -65,6 +65,16 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean ausgewaehlt = reise != null && reise.hasGewaehlteTS();
+	    menu.findItem(R.id.exportieren).setEnabled(ausgewaehlt);
+	    menu.findItem(R.id.exportieren).getIcon().setAlpha(ausgewaehlt?255:130);
+	    menu.findItem(R.id.loeschen).setEnabled(ausgewaehlt);
+	    menu.findItem(R.id.loeschen).getIcon().setAlpha(ausgewaehlt?255:130);
+	    return true;
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -76,6 +86,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		if (id == R.id.alleAnzeigen) {
 			reise = new Reise(this);
 			reise.initFromDB();
+			invalidateOptionsMenu();
 			return true;
 		}
 
@@ -83,6 +94,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 			if (reise != null) {
 				reise.dump2gpx();
 			}
+			invalidateOptionsMenu();
 			return true;
 		}
 
@@ -141,7 +153,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		// Keine Aktion nötig
 
 	}
-
+	
 	private Uri gibAlarm() {
 		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -195,6 +207,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
                 new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	reise.loescheGewaehlteTS();
+            	invalidateOptionsMenu();
                 dialog.cancel();
             }
         });
