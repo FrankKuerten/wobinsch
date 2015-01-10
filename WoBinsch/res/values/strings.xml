@@ -26,5 +26,6 @@
     <string name="alleAnzeigenKurz">Alle</string>
     <string name="exportierenKurz">Export</string>
     <string name="loeschenKurz">Löschen</string>
+    <string name="msg_dateiExportiert">Datei wurde exportiert</string>
 
 </resources>

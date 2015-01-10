@@ -283,7 +283,7 @@ int id edit_query 0x7f050030
 int id end 0x7f050013
 int id expand_activities_button 0x7f050026
 int id expanded_menu 0x7f05002c
-int id exportieren 0x7f050050
+int id exportieren 0x7f050051
 int id home 0x7f050014
 int id homeAsUp 0x7f050005
 int id icon 0x7f05002a
@@ -292,7 +292,7 @@ int id image 0x7f050027
 int id listMode 0x7f050001
 int id list_item 0x7f050029
 int id loc 0x7f05003e
-int id loeschen 0x7f050051
+int id loeschen 0x7f050050
 int id middle 0x7f050012
 int id never 0x7f050009
 int id none 0x7f050010
@@ -389,6 +389,7 @@ int string loeschen 0x7f0a0015
 int string loeschenKurz 0x7f0a0025
 int string m 0x7f0a001c
 int string mProS 0x7f0a001d
+int string msg_dateiExportiert 0x7f0a0026
 int string nein 0x7f0a0022
 int string wirklichLoeschen 0x7f0a0020
 int style AppBaseTheme 0x7f0b008b

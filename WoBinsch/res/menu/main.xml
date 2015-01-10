@@ -5,10 +5,18 @@
 
     <item
         android:id="@+id/alleAnzeigen"
-        android:orderInCategory="100"
+        android:orderInCategory="300"
         android:title="@string/alleAnzeigen"
         android:titleCondensed="@string/alleAnzeigenKurz"
-        android:icon="@drawable/search"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="ifRoom"/>
+
+     <item
+        android:id="@+id/loeschen"
+        android:orderInCategory="200"
+        android:title="@string/loeschen"
+        android:titleCondensed="@string/loeschenKurz"
+        android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="ifRoom"/>
      
      <item
@@ -16,14 +24,7 @@
         android:orderInCategory="100"
         android:title="@string/exportieren"
         android:titleCondensed="@string/exportierenKurz"
-        android:icon="@drawable/export"
+        android:icon="@android:drawable/ic_menu_save"
         app:showAsAction="ifRoom"/>
 
-     <item
-        android:id="@+id/loeschen"
-        android:orderInCategory="100"
-        android:title="@string/loeschen"
-        android:titleCondensed="@string/loeschenKurz"
-        android:icon="@drawable/trash"
-        app:showAsAction="ifRoom"/>
 </menu>

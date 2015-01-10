@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener,
 		OnItemSelectedListener {
@@ -30,6 +31,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private Button button;
 	private Spinner vehikelFeld;
 	private Reise reise;
+	private int toastDuration = Toast.LENGTH_SHORT;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +72,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean ausgewaehlt = reise != null && reise.hasGewaehlteTS();
 	    menu.findItem(R.id.exportieren).setEnabled(ausgewaehlt);
-	    menu.findItem(R.id.exportieren).getIcon().setAlpha(ausgewaehlt?255:130);
+	    menu.findItem(R.id.exportieren).setVisible(ausgewaehlt);
+//	    menu.findItem(R.id.exportieren).getIcon().setAlpha(ausgewaehlt?255:130);
 	    menu.findItem(R.id.loeschen).setEnabled(ausgewaehlt);
-	    menu.findItem(R.id.loeschen).getIcon().setAlpha(ausgewaehlt?255:130);
+	    menu.findItem(R.id.loeschen).setVisible(ausgewaehlt);
+//	    menu.findItem(R.id.loeschen).getIcon().setAlpha(ausgewaehlt?255:130);
 	    return true;
 	}
 
@@ -91,10 +95,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		}
 
 		if (id == R.id.exportieren) {
-			if (reise != null) {
+			if (reise != null && reise.hasGewaehlteTS()) {
 				reise.dump2gpx();
 			}
-			invalidateOptionsMenu();
+			showToast(getString(R.string.msg_dateiExportiert));
 			return true;
 		}
 
@@ -152,6 +156,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	public void onNothingSelected(AdapterView<?> parent) {
 		// Keine Aktion nötig
 
+	}
+	
+	private void showToast(String text) {
+		Toast.makeText(this.getApplicationContext(), text, toastDuration).show();
 	}
 	
 	private Uri gibAlarm() {
