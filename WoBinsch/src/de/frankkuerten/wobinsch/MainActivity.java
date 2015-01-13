@@ -36,9 +36,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		
+
 		setContentView(R.layout.activity_main);
 
 		// Location Manager vom System holen
@@ -67,17 +67,17 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean ausgewaehlt = reise != null && reise.hasGewaehlteTS();
-	    menu.findItem(R.id.exportieren).setEnabled(ausgewaehlt);
-	    menu.findItem(R.id.exportieren).setVisible(ausgewaehlt);
-//	    menu.findItem(R.id.exportieren).getIcon().setAlpha(ausgewaehlt?255:130);
-	    menu.findItem(R.id.loeschen).setEnabled(ausgewaehlt);
-	    menu.findItem(R.id.loeschen).setVisible(ausgewaehlt);
-//	    menu.findItem(R.id.loeschen).getIcon().setAlpha(ausgewaehlt?255:130);
-	    return true;
+		menu.findItem(R.id.exportieren).setEnabled(ausgewaehlt);
+		menu.findItem(R.id.exportieren).setVisible(ausgewaehlt);
+		// menu.findItem(R.id.exportieren).getIcon().setAlpha(ausgewaehlt?255:130);
+		menu.findItem(R.id.loeschen).setEnabled(ausgewaehlt);
+		menu.findItem(R.id.loeschen).setVisible(ausgewaehlt);
+		// menu.findItem(R.id.loeschen).getIcon().setAlpha(ausgewaehlt?255:130);
+		return true;
 	}
 
 	@Override
@@ -85,24 +85,22 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
 
-		if (id == R.id.alleAnzeigen) {
+		switch (item.getItemId()) {
+		case R.id.alleAnzeigen:
 			reise = new Reise(this);
 			reise.initFromDB();
 			invalidateOptionsMenu();
 			return true;
-		}
 
-		if (id == R.id.exportieren) {
+		case R.id.exportieren:
 			if (reise != null && reise.hasGewaehlteTS()) {
 				reise.dump2gpx();
+				showToast(getString(R.string.msg_dateiExportiert));
 			}
-			showToast(getString(R.string.msg_dateiExportiert));
 			return true;
-		}
 
-		if (id == R.id.loeschen) {
+		case R.id.loeschen:
 			if (reise != null && reise.hasGewaehlteTS()) {
 				wirklichLoeschen();
 			}
@@ -113,14 +111,18 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		if (started) {
-			button.setText(R.string.button_start);
-			stop();
-		} else {
-			button.setText(R.string.button_stop);
-			start();
+		switch (v.getId()) {
+		case R.id.button:
+			if (started) {
+				button.setText(R.string.button_start);
+				stop();
+			} else {
+				button.setText(R.string.button_stop);
+				start();
+			}
+			started = !started;
+			break;
 		}
-		started = !started;
 	}
 
 	public void start() {
@@ -146,7 +148,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
-		if (view.getId() == R.id.vehikel && started) {
+		if (parent.getId() == R.id.vehikel && started) {
 			stop();
 			start();
 		}
@@ -157,13 +159,15 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		// Keine Aktion nötig
 
 	}
-	
+
 	private void showToast(String text) {
-		Toast.makeText(this.getApplicationContext(), text, toastDuration).show();
+		Toast.makeText(this.getApplicationContext(), text, toastDuration)
+				.show();
 	}
-	
+
 	private Uri gibAlarm() {
-		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		Uri alert = RingtoneManager
+				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
 		if (alert == null) {
 			// alert is null, using backup
@@ -183,10 +187,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	public void gibLauteNachricht() {
 		// Notification Manager zitieren
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext())
-				.setSmallIcon(R.drawable.anker)
-				.setAutoCancel(true)
-				.setContentTitle(getString(R.string.Alarm))
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				getApplicationContext()).setSmallIcon(R.drawable.anker)
+				.setAutoCancel(true).setContentTitle(getString(R.string.Alarm))
 				.setContentText(getString(R.string.AnkerwacheNachricht))
 				.setSound(gibAlarm()); // This sets the sound to play
 
@@ -202,32 +205,32 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		} else {
 			button.setText(R.string.button_start);
 		}
-		if (reise != null){
+		if (reise != null) {
 			reise.refreshList();
 		}
 	}
-	
-	private void wirklichLoeschen(){
-		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setMessage(getString(R.string.wirklichLoeschen));
-        alertBuilder.setCancelable(true);
-        alertBuilder.setPositiveButton(getString(R.string.ja),
-                new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            	reise.loescheGewaehlteTS();
-            	invalidateOptionsMenu();
-                dialog.cancel();
-            }
-        });
-        alertBuilder.setNegativeButton(getString(R.string.nein),
-                new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
 
-        AlertDialog alert = alertBuilder.create();
-        alert.show();
+	private void wirklichLoeschen() {
+		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+		alertBuilder.setMessage(getString(R.string.wirklichLoeschen));
+		alertBuilder.setCancelable(true);
+		alertBuilder.setPositiveButton(getString(R.string.ja),
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						reise.loescheGewaehlteTS();
+						invalidateOptionsMenu();
+						dialog.cancel();
+					}
+				});
+		alertBuilder.setNegativeButton(getString(R.string.nein),
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+
+		AlertDialog alert = alertBuilder.create();
+		alert.show();
 	}
-	
+
 }
