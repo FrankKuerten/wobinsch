@@ -67,7 +67,7 @@ public class Reise implements OnItemClickListener {
 	private void gruppiereTeilStrecken(List<Position> posen) {
 		Position posVorher = null;
 		TeilStrecke ts = null;
-		float[] entfernung = { 0 };
+		float entfernung;
 
 		for (Position pos : posen) {
 			if (posVorher == null
@@ -78,12 +78,8 @@ public class Reise implements OnItemClickListener {
 				ts = new TeilStrecke();
 				positionen.add(ts);
 			} else {
-				Location.distanceBetween(posVorher.getLat(),
-						posVorher.getLon(), pos.getLat(), pos.getLon(),
-						entfernung);
-				if (entfernung.length > 0) {
-					ts.setGesamtLaenge(ts.getGesamtLaenge() + entfernung[0]);
-				}
+				entfernung = posVorher.getOrt().distanceTo(pos.getOrt());
+				ts.setGesamtLaenge(ts.getGesamtLaenge() + entfernung);
 			}
 			if (ts.getGesamtLaenge() > 0) {
 				long anfang = ts.getPositionen().get(0).getOrt().getTime();
@@ -97,20 +93,17 @@ public class Reise implements OnItemClickListener {
 		}
 	}
 
-	public static boolean isAnkerketteLos(List<Position> aktTS) {
+	public static boolean isAnkerketteLos(List<Position> aktTS, long laenge) {
 		// Ankerwache
 		if (aktTS == null || aktTS.size() < 2
 				|| aktTS.get(0).getVehikel() != Vehikel.VA) {
 			return false;
 		}
-		Position erste = aktTS.get(0);
-		Position letzte = aktTS.get(aktTS.size() - 1);
-		float[] entfernung = { 0 };
-		Location.distanceBetween(erste.getLat(),
-				erste.getLon(), letzte.getLat(), letzte.getLon(),
-				entfernung);
-		// TODO: Magic number 5 Meter
-		if (entfernung.length > 0 && entfernung[0] > 5) {
+		Location erste = aktTS.get(0).getOrt();
+		Location letzte = aktTS.get(aktTS.size() - 1).getOrt();
+		float entfernung = erste.distanceTo(letzte);
+
+		if (entfernung > laenge) {
 			return true;
 		}
 		return false;

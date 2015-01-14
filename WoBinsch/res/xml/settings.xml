@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/einstellungen" >
+        <EditTextPreference
+            android:defaultValue="5"
+            android:key="kettenLaenge"
+            android:inputType="number"
+            android:title="@string/kettenLaenge" />
+
+        <RingtonePreference
+            android:key="signalAnkerwache"
+            android:ringtoneType="all"
+            android:showDefault="true"
+            android:showSilent="true"
+            android:title="@string/signal"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

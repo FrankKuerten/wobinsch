@@ -27,5 +27,10 @@
     <string name="exportierenKurz">Export</string>
     <string name="loeschenKurz">Löschen</string>
     <string name="msg_dateiExportiert">Datei wurde exportiert</string>
+    <string name="einstellungen">Einstellungen</string>
+    <string name="kettenLaenge">Länge der Ankerkette</string>
+    <string name="kettenLaengeSummary">Länge der Ankerkette für Ankerwache</string>
+    <string name="signal">Signal für Ankerwache</string>
 
 </resources>
+

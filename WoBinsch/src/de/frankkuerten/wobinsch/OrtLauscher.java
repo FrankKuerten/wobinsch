@@ -2,9 +2,11 @@ package de.frankkuerten.wobinsch;
 
 import java.util.List;
 
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 public class OrtLauscher implements LocationListener {
 
@@ -22,9 +24,14 @@ public class OrtLauscher implements LocationListener {
 		dbdao.insert(pos);
 
 		// Ankerwache
+		
+		// Länge der Ankerkette aus Preferences
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(activity);
+		long laenge = Long.parseLong(settings.getString("kettenLaenge", "5"));
+		
 		List<Position> aktTS = dbdao.readNewestBlock();
 		if (activity.getVehikel() == Vehikel.VA
-				&& Reise.isAnkerketteLos(aktTS)) {
+				&& Reise.isAnkerketteLos(aktTS, laenge)) {
 			activity.gibLauteNachricht();
 		}
 		

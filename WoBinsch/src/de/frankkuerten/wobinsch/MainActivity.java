@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -32,6 +35,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private Spinner vehikelFeld;
 	private Reise reise;
 	private int toastDuration = Toast.LENGTH_SHORT;
+	private static final int RESULT_SETTINGS = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +109,13 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 				wirklichLoeschen();
 			}
 			return true;
+
+		case R.id.einstellungen:
+			Intent intent = new Intent();
+			intent.setClass(MainActivity.this, EinstellungenActivity.class);
+			startActivityForResult(intent, 0);
+			return true;
+
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -166,22 +177,14 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	}
 
 	private Uri gibAlarm() {
-		Uri alert = RingtoneManager
-				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-		if (alert == null) {
-			// alert is null, using backup
-			alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-
-			// I can't see this ever being null (as always have a default
-			// notification) but just incase
-			if (alert == null) {
-				// alert backup is null, using 2nd backup
-				alert = RingtoneManager
-						.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-			}
+		// Signalton aus Preferences
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		String signal = settings.getString("signalAnkerwache", null);
+		if (signal == null){
+			return null;
 		}
-		return alert;
+		
+		return Uri.parse(signal);
 	}
 
 	public void gibLauteNachricht() {
