@@ -179,11 +179,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private Uri gibAlarm() {
 		// Signalton aus Preferences
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		String signal = settings.getString("signalAnkerwache", null);
-		if (signal == null){
-			return null;
-		}
-		
+		String signal = settings.getString("signalAnkerwache", "");
 		return Uri.parse(signal);
 	}
 

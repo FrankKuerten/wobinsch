@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
@@ -20,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 @Root(name = "gpx")
+@Order(elements={"wpt", "trk"})
 public class Reise implements OnItemClickListener {
 
 	private List<TeilStrecke> positionen = new Vector<TeilStrecke>();
@@ -119,7 +121,7 @@ public class Reise implements OnItemClickListener {
 		}
 		initFromDB();
 	}
-	
+
 	public boolean hasGewaehlteTS() {
 		for (TeilStrecke ts : this.positionen) {
 			if (ts.isGewaehlt()) {
@@ -136,6 +138,18 @@ public class Reise implements OnItemClickListener {
 				!positionen.get(position).isGewaehlt());
 		listAdapter.notifyDataSetChanged();
 		activity.invalidateOptionsMenu();
+	}
+
+	@ElementList(inline = true)
+	public List<WegPunkt> getGewaehlteWegPunkte() {
+		List<WegPunkt> erg = new Vector<WegPunkt>();
+		for (TeilStrecke ts : positionen) {
+			if (ts.isGewaehlt() && ts.getPositionen() != null
+					&& !ts.getPositionen().isEmpty()) {
+				erg.add(new WegPunkt(ts.getPositionen().get(0)));
+			}
+		}
+		return erg;
 	}
 
 	@Path("trk")
@@ -155,9 +169,9 @@ public class Reise implements OnItemClickListener {
 	public void setGewaehlteTS(List<TeilStrecke> pos) {
 		positionen = pos;
 	}
-	
-	public void refreshList(){
-		if (listAdapter != null){
+
+	public void refreshList() {
+		if (listAdapter != null) {
 			listAdapter.notifyDataSetChanged();
 		}
 	}
