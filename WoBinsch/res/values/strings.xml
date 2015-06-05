@@ -14,8 +14,8 @@
     <string name="Fahrzeug">Mit</string>
     <string name="Klammerauf">\u0020(</string>
     <string name="Punkte">\u0020Messpunkte)</string>
-    <string name="Geschwindigkeit">Geschw.:\u0020</string>
-    <string name="Strecke">Strecke:\u0020</string>
+    <string name="geschwindigkeit">Geschw.:\u0020</string>
+    <string name="strecke">Strecke:\u0020</string>
     <string name="m">\u0020m\u0020</string>
     <string name="mProS">\u0020m/s</string>
     <string name="Alarm">Ankerwache</string>
@@ -31,6 +31,20 @@
     <string name="kettenLaenge">Länge der Ankerkette</string>
     <string name="kettenLaengeSummary">Länge der Ankerkette für Ankerwache</string>
     <string name="signal">Signal für Ankerwache</string>
+    <string name="einheit">Einheiten</string>
+    <string name="leer">\u0020</string>
+    <string-array name="Einheiten">
+        <item>Meter, m/s</item>
+        <item>Kilometer, km/h</item>
+        <item>Meilen, mph</item>
+        <item>Seemeilen, Knoten</item>
+    </string-array>
+    <string-array name="EinheitenWert">
+        <item>M</item>
+        <item>KM</item>
+        <item>LM</item>
+        <item>SM</item>
+    </string-array>
 
 </resources>
 

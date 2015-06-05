@@ -8,11 +8,13 @@ import java.util.TimeZone;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
 import android.location.Location;
 
 @Root(name="trkpt")
+@Order(elements={"time", "speed"})
 public class Position {
 	private Location ort;
 	private Vehikel vehikel;

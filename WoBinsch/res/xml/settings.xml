@@ -2,6 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory android:title="@string/einstellungen" >
+        <ListPreference
+            android:defaultValue="M"
+            android:entries="@array/Einheiten"
+            android:entryValues="@array/EinheitenWert"
+            android:key="einheit"
+            android:inputType="text"
+            android:title="@string/einheit" />
+        
         <EditTextPreference
             android:defaultValue="5"
             android:key="kettenLaenge"

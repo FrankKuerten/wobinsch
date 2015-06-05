@@ -15,6 +15,8 @@ public class TeilStrecke {
 	private float gesamtLaenge;
 	private float schnittGeschwindigkeit;
 	private boolean gewaehlt = false;
+	private String labelLaenge = "m";
+	private String labelGeschw = "m/s";
 	public List<Position> getPositionen() {
 		return positionen;
 	}
@@ -39,6 +41,19 @@ public class TeilStrecke {
 	}
 	public void setGewaehlt(boolean gewaehlt) {
 		this.gewaehlt = gewaehlt;
+	}
+	
+	public String getLabelLaenge() {
+		return labelLaenge;
+	}
+	public void setLabelLaenge(String labelLaenge) {
+		this.labelLaenge = labelLaenge;
+	}
+	public String getLabelGeschw() {
+		return labelGeschw;
+	}
+	public void setLabelGeschw(String labelGeschw) {
+		this.labelGeschw = labelGeschw;
 	}
 	public void addPosition(Position pos){
 		this.positionen.add(pos);

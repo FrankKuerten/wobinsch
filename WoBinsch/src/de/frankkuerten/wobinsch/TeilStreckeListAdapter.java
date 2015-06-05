@@ -54,7 +54,9 @@ public class TeilStreckeListAdapter extends BaseAdapter {
 		TextView datumVonFeld = (TextView) view.findViewById(R.id.DatumVon);
 		TextView datumBisFeld = (TextView) view.findViewById(R.id.DatumBis);
 		TextView laengeFeld = (TextView) view.findViewById(R.id.Gesamtlaenge);
+		TextView labelLaenge = (TextView) view.findViewById(R.id.labelLaenge);
 		TextView geschwFeld = (TextView) view.findViewById(R.id.SchnittGeschwindigkeit);
+		TextView labelGeschw = (TextView) view.findViewById(R.id.labelGeschw);
 		
 		gewaehltFeld.setChecked(ts.isGewaehlt());
 		vehikelFeld.setText(ts.getVehikel().toString());
@@ -63,6 +65,8 @@ public class TeilStreckeListAdapter extends BaseAdapter {
 		datumBisFeld.setText(Position.df.format(ts.getDatumBis()));
 		laengeFeld.setText(String.valueOf(ts.getGesamtLaenge()));
 		geschwFeld.setText(String.valueOf(ts.getSchnittGeschwindigkeit()));
+		labelLaenge.setText(ts.getLabelLaenge());
+		labelGeschw.setText(ts.getLabelGeschw());
 	}
 
 }

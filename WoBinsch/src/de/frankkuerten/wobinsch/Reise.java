@@ -13,7 +13,9 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -70,6 +72,7 @@ public class Reise implements OnItemClickListener {
 		Position posVorher = null;
 		TeilStrecke ts = null;
 		float entfernung;
+		Einheiten einheit = this.getEinheit();
 
 		for (Position pos : posen) {
 			if (posVorher == null
@@ -78,21 +81,34 @@ public class Reise implements OnItemClickListener {
 					// oder 10 Minuten Unterbrechung
 					|| pos.getOrt().getTime() - posVorher.getOrt().getTime() > 600000) {
 				ts = new TeilStrecke();
+				ts.setLabelLaenge(einheit.getLabelLaenge());
+				ts.setLabelGeschw(einheit.getLabelGeschw());
 				positionen.add(ts);
 			} else {
 				entfernung = posVorher.getOrt().distanceTo(pos.getOrt());
+				entfernung = entfernung  / einheit.getKonvLaenge();
 				ts.setGesamtLaenge(ts.getGesamtLaenge() + entfernung);
 			}
 			if (ts.getGesamtLaenge() > 0) {
 				long anfang = ts.getPositionen().get(0).getOrt().getTime();
 				long ende = pos.getOrt().getTime();
-				ts.setSchnittGeschwindigkeit(ts.getGesamtLaenge()
-						/ ((ende - anfang) / 1000));
+				long msec = ende - anfang;
+				float sec = msec / 1000;
+				float zeit = sec / einheit.getKonvZeit();
+				ts.setSchnittGeschwindigkeit(ts.getGesamtLaenge() / zeit);
 			}
 
 			ts.addPosition(pos);
 			posVorher = pos;
 		}
+	}
+	
+	private Einheiten getEinheit() {
+		// Einheit aus Preferences
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(activity);
+		String key = settings.getString("einheit", "M");
+		return Enum.valueOf(Einheiten.class, key);
 	}
 
 	public static boolean isAnkerketteLos(List<Position> aktTS, long laenge) {
